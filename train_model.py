@@ -18,7 +18,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 # ── Load data ────────────────────────────────────────────────────────────────
-DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "diabetes.csv")
+DATA_PATH = os.path.join(os.path.dirname(__file__), "diabetes (2).csv")
 df = pd.read_csv(DATA_PATH)
 
 print(f"Dataset shape: {df.shape}")
