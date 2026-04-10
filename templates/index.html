@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DiabetesIQ — AI Prediction</title>
+  <meta name="description" content="An AI-powered diabetes risk prediction tool using machine learning." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- ── Background blobs ── -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
+  <div class="bg-blob blob-3"></div>
+
+  <!-- ── Header ── -->
+  <header>
+    <div class="logo">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <circle cx="16" cy="16" r="15" stroke="url(#grad)" stroke-width="2"/>
+        <path d="M10 16c0-3.314 2.686-6 6-6s6 2.686 6 6-2.686 6-6 6" stroke="url(#grad)" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="16" cy="16" r="3" fill="url(#grad)"/>
+        <defs>
+          <linearGradient id="grad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#a78bfa"/>
+            <stop offset="1" stop-color="#38bdf8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>Diabetes<strong>IQ</strong></span>
+    </div>
+    <nav>
+      <a href="#predict-section">Predict</a>
+      <a href="#info-section">About</a>
+      <span class="badge" id="model-badge">Loading model…</span>
+    </nav>
+  </header>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <p class="hero-eyebrow">AI-Powered Health Analysis</p>
+    <h1>Predict Your <span class="gradient-text">Diabetes Risk</span><br>in Seconds</h1>
+    <p class="hero-sub">Enter your health metrics below. Our Random Forest model, trained on 768 patient records, will calculate your likelihood of diabetes with clinical-grade precision.</p>
+    <a href="#predict-section" class="btn-primary">Start Analysis ↓</a>
+  </section>
+
+  <!-- ── Main Content ── -->
+  <main id="predict-section">
+
+    <!-- Left: Form -->
+    <section class="form-card glass">
+      <h2>Health Metrics</h2>
+      <p class="form-subtitle">All fields use <code>0</code> as "unknown/not tested" — we'll handle imputation automatically.</p>
+
+      <form id="predict-form" novalidate>
+        <div class="grid-2">
+
+          <!-- Pregnancies -->
+          <div class="field-group">
+            <label for="Pregnancies">
+              Pregnancies
+              <span class="tooltip" data-tip="Number of times pregnant (0 = never)">?</span>
+            </label>
+            <input type="number" id="Pregnancies" name="Pregnancies" min="0" max="20" value="1" step="1" />
+            <input type="range" class="slider" min="0" max="20" value="1" step="1" data-target="Pregnancies" />
+          </div>
+
+          <!-- Glucose -->
+          <div class="field-group">
+            <label for="Glucose">
+              Glucose (mg/dL)
+              <span class="tooltip" data-tip="Plasma glucose concentration (2-hr OGTT). Normal: 70–99">?</span>
+            </label>
+            <input type="number" id="Glucose" name="Glucose" min="0" max="300" value="120" step="1" />
+            <input type="range" class="slider" min="0" max="300" value="120" step="1" data-target="Glucose" />
+          </div>
+
+          <!-- Blood Pressure -->
+          <div class="field-group">
+            <label for="BloodPressure">
+              Blood Pressure (mmHg)
+              <span class="tooltip" data-tip="Diastolic blood pressure. Normal: 60–80 mmHg">?</span>
+            </label>
+            <input type="number" id="BloodPressure" name="BloodPressure" min="0" max="200" value="72" step="1" />
+            <input type="range" class="slider" min="0" max="200" value="72" step="1" data-target="BloodPressure" />
+          </div>
+
+
+          <!-- Insulin -->
+          <div class="field-group">
+            <label for="Insulin">
+              Insulin (μU/mL)
+              <span class="tooltip" data-tip="2-hour serum insulin. 0 = not tested. Normal: 16–166">?</span>
+            </label>
+            <input type="number" id="Insulin" name="Insulin" min="0" max="900" value="0" step="1" />
+            <input type="range" class="slider" min="0" max="900" value="0" step="1" data-target="Insulin" />
+          </div>
+
+          <!-- BMI -->
+          <div class="field-group">
+            <label for="BMI">
+              BMI (kg/m²)
+              <span class="tooltip" data-tip="Body Mass Index. Normal: 18.5–24.9">?</span>
+            </label>
+            <input type="number" id="BMI" name="BMI" min="0" max="70" value="25" step="0.1" />
+            <input type="range" class="slider" min="0" max="70" value="25" step="0.1" data-target="BMI" />
+          </div>
+
+          <!-- Diabetes Pedigree -->
+          <div class="field-group">
+            <label for="DiabetesPedigreeFunction">
+              Diabetes Pedigree
+              <span class="tooltip" data-tip="Genetic risk score based on family history. Range: 0.08–2.42">?</span>
+            </label>
+            <input type="number" id="DiabetesPedigreeFunction" name="DiabetesPedigreeFunction" min="0" max="3" value="0.3" step="0.001" />
+            <input type="range" class="slider" min="0" max="3" value="0.3" step="0.001" data-target="DiabetesPedigreeFunction" />
+          </div>
+
+          <!-- Age -->
+          <div class="field-group">
+            <label for="Age">
+              Age (years)
+              <span class="tooltip" data-tip="Patient age in years">?</span>
+            </label>
+            <input type="number" id="Age" name="Age" min="1" max="120" value="30" step="1" />
+            <input type="range" class="slider" min="1" max="120" value="30" step="1" data-target="Age" />
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn-predict" id="submit-btn">
+          <span id="btn-text">🔬 Analyze Risk</span>
+          <span id="btn-loader" class="loader hidden"></span>
+        </button>
+      </form>
+    </section>
+
+    <!-- Right: Result + Chart -->
+    <aside class="results-col">
+
+      <!-- Result Card -->
+      <div class="result-card glass" id="result-card">
+        <div class="result-placeholder" id="result-placeholder">
+          <div class="placeholder-icon">🩺</div>
+          <p>Your prediction result will appear here after you click <strong>Analyze Risk</strong>.</p>
+        </div>
+
+        <div class="result-content hidden" id="result-content">
+          <!-- Gauge -->
+          <div class="gauge-wrapper">
+            <canvas id="gauge-canvas" width="220" height="130"></canvas>
+            <div class="gauge-center">
+              <span class="gauge-percent" id="gauge-percent">—</span>
+              <span class="gauge-label">Risk Score</span>
+            </div>
+          </div>
+
+          <!-- Badge -->
+          <div class="risk-badge" id="risk-badge">—</div>
+          <div class="result-verdict" id="result-verdict">—</div>
+
+          <!-- Advice -->
+          <ul class="advice-list" id="advice-list"></ul>
+        </div>
+      </div>
+
+      <!-- Feature Importance Chart -->
+      <div class="chart-card glass" id="info-section">
+        <h3>Feature Importance</h3>
+        <p class="chart-sub">Which factors most influence the model's decision.</p>
+        <canvas id="importance-chart" height="260"></canvas>
+      </div>
+
+    </aside>
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <p>⚠️ <strong>Disclaimer:</strong> This tool is for educational purposes only. It is not a medical diagnosis. Always consult a healthcare professional.</p>
+    <p class="footer-sub">Model: Random Forest · Accuracy: <span id="footer-accuracy">—</span> · AUC: <span id="footer-auc">—</span></p>
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
